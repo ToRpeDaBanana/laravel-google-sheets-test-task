@@ -1,5 +1,5 @@
 <?php
-namespace App\Console\Commands;
+namespace App\Services;
 
 use Google\Client;
 use Google\Service\Sheets;
@@ -26,11 +26,21 @@ class GoogleSheetService
 
     public function syncData()
     {
+
+        $existingComments = $this->getExistingComments();
+
+        $this->clearSheet();
+
         $items = Item::allowed()->get();
 
+
         $values = [["ID", "Name", "Description", "Status", "Comment"]];
+
         foreach ($items as $item) {
-            $values[] = [$item->id, $item->name, $item->description, $item->status, ""];
+            // Используем существующий комментарий, если он есть
+            $comment = $existingComments[$item->id] ?? "";
+
+            $values[] = [$item->id, $item->name, $item->description, $item->status, $comment];
         }
 
         $body = new \Google\Service\Sheets\ValueRange([
@@ -39,7 +49,35 @@ class GoogleSheetService
 
         $params = ['valueInputOption' => 'RAW'];
         $range = 'DataSheet!A1';
+
         $this->service->spreadsheets_values->update($this->spreadsheetId, $range, $body, $params);
+    }
+
+    /**
+     * Получает комментарии из Google Sheets и связывает их с ID записей
+     */
+    private function getExistingComments()
+    {
+        $range = "DataSheet!A2:E";
+        $response = $this->service->spreadsheets_values->get($this->spreadsheetId, $range);
+        $values = $response->getValues();
+
+        $comments = [];
+        if (!isset($comments)){
+            foreach ($values as $row) {
+                if (isset($row[0]) && isset($row[4])) {
+                    $comments[$row[0]] = $row[4]; // ID => Comment
+                }
+            }
+        }
+
+        return $comments;
+    }
+
+    private function clearSheet()
+    {
+        $requestBody = new \Google\Service\Sheets\ClearValuesRequest();
+        $this->service->spreadsheets_values->clear($this->spreadsheetId, 'DataSheet!A2:E', $requestBody);
     }
 
     public function getData() {

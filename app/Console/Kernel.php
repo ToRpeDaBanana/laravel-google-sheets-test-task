@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Console\Commands\GoogleSheetService;
 
 class Kernel extends ConsoleKernel
 {
@@ -12,7 +13,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('google:fetch')->everyMinute();
+        $schedule->call(function () {
+            (new GoogleSheetService(config('services.google.spreadsheet_id')))->syncData();
+        })->everyMinute();
     }
 
     /**

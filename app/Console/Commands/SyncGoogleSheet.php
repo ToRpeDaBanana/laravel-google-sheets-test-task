@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Console\Commands\GoogleSheetService;
+use App\Services\GoogleSheetService;
 
 class SyncGoogleSheet extends Command
 {

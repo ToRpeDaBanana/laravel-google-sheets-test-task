@@ -6,11 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Item;
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\DB;
+use App\Services\GoogleSheetService;
 
 class ItemController extends Controller
 {
     public function index() {
-        $items = Item::paginate(10);
+        $items = Item::query()->paginate(10);
         return view('items.index', compact('items'));
     }
 
@@ -74,19 +75,4 @@ class ItemController extends Controller
 
         return redirect()->route('items.index')->with('success', 'Table cleared successfully.');
     }
-    // public function syncWithGoogleSheets()
-    // {
-    //     $spreadsheetId = '1v7z-sal_g2M3nf0mUvKbj7TwiR2Coe4OG79FXY0kqT4';
-    //     $range = 'Sheet1!A1:D';
-
-    //     $items = Item::where('status', 'Allowed')->get();
-    //     $data = $items->map(function ($item) {
-    //         return [$item->id, $item->name, $item->status, $item->created_at];
-    //     })->toArray();
-
-
-    //     $this->googleSheetsService->updateSheetData($spreadsheetId, $range, $data);
-
-    //     return redirect()->route('items.index')->with('success', 'Data synced with Google Sheets.');
-    // }
 }

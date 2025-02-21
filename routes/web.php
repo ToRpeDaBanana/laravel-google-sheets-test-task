@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\GoogleSheetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,23 +15,10 @@ use App\Http\Controllers\ItemController;
 |
 */
 
-// Route::get('/', [ItemController::class, 'index'])->name('home');
 
-// Route::resource('items', ItemController::class);
-
-// // Дополнительные маршруты
 Route::post('/items/generate', [ItemController::class, 'generateData'])->name('items.generate');
 
 Route::get('/items/clear', [ItemController::class, 'clear'])->name('items.clear');
-
-// // Роут для вывода данных из Google Sheets
-// Route::get('/fetch/{count?}', function ($count = null) {
-//     $command = 'fetch:google-sheets ' . ($count ?? '');
-//     $output = shell_exec("php artisan $command");
-//     return "<pre>$output</pre>";
-// })->name('fetch');
-// Route::resource('items', ItemController::class);
-// Route::get('/fetch/{count?}', [GoogleSheetController::class, 'fetch']);
 
 Route::get('/', [ItemController::class, 'index'])->name('home');
 

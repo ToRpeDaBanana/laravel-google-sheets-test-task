@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Services\GoogleSheetService;
 
 class Item extends Model
 {
@@ -15,13 +16,26 @@ class Item extends Model
     {
         parent::boot();
 
-        static::addGlobalScope('allowed', function ($query) {
-            $query->where('status', 'Allowed');
+        static::created(function ($item) {
+            $item->syncToGoogleSheet();
+        });
+
+        static::updated(function ($item) {
+            $item->syncToGoogleSheet();
+        });
+
+        static::deleted(function ($item) {
+            $item->syncToGoogleSheet();
         });
     }
-
     public function scopeAllowed($query)
     {
         return $query->where('status', 'Allowed');
+    }
+
+    protected static function syncToGoogleSheet()
+    {
+        $service = new GoogleSheetService();
+        $service->syncData();
     }
 }

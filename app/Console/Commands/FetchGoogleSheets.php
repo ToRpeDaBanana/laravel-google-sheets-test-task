@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Console\Commands\GoogleSheetService;
+use App\Services\GoogleSheetService;
 use App\Models\Item;
 
 class FetchGoogleSheets extends Command
