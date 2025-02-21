@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Item</title>
+    <title>Редактирование Item</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container mt-5">
-        <h1>Edit Item</h1>
+        <h1>Редактирование Item</h1>
 
         <form action="{{ route('items.update', $item->id) }}" method="POST">
             @csrf
@@ -24,8 +24,8 @@
                     <option value="Prohibited" {{ $item->status == 'Prohibited' ? 'selected' : '' }}>Prohibited</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">Update</button>
-            <a href="{{ route('items.index') }}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a href="{{ route('items.index') }}" class="btn btn-secondary">Отмена</a>
         </form>
     </div>
 </body>
