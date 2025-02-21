@@ -14,7 +14,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('index');
+    return view('/items/index');
 });
 Route::get('/items/generate', [ItemController::class, 'generate'])->name('items.generate');
 Route::get('/items/clear', [ItemController::class, 'clear'])->name('items.clear');
+Route::get('/items/edit', [ItemController::class, 'edit'])->name('items.edit');
+Route::get('/items/create', [ItemController::class, 'create'])->name('items.create');
+Route::get('/items/show', [ItemController::class, 'show'])->name('items.show');
+Route::get('/fetch/{count?}', function ($count = null) {
+    $command = 'fetch:google-sheets ' . ($count ?: '');
+    $output = shell_exec("php artisan $command");
+    return "<pre>$output</pre>";
+});

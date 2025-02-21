@@ -33,23 +33,25 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($items as $item)
-                    <tr>
-                        <td>{{ $item->id }}</td>
-                        <td>{{ $item->name }}</td>
-                        <td>{{ $item->status }}</td>
-                        <td>{{ $item->created_at }}</td>
-                        <td>
-                            <a href="{{ route('items.show', $item->id) }}" class="btn btn-info btn-sm">View</a>
-                            <a href="{{ route('items.edit', $item->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('items.destroy', $item->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
+                @if(! $items->isEmpty())
+                    @foreach ($items as $item)
+                        <tr>
+                            <td>{{ $item->id }}</td>
+                            <td>{{ $item->name }}</td>
+                            <td>{{ $item->status }}</td>
+                            <td>{{ $item->created_at }}</td>
+                            <td>
+                                <a href="{{ route('items.show', $item->id) }}" class="btn btn-info btn-sm">View</a>
+                                <a href="{{ route('items.edit', $item->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <form action="{{ route('items.destroy', $item->id) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
             </tbody>
         </table>
     </div>

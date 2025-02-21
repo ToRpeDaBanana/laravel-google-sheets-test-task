@@ -76,4 +76,19 @@ class ItemController extends Controller
 
         return redirect()->route('items.index')->with('success', 'Table cleared successfully.');
     }
+    public function syncWithGoogleSheets()
+    {
+        $spreadsheetId = '1v7z-sal_g2M3nf0mUvKbj7TwiR2Coe4OG79FXY0kqT4';
+        $range = 'Sheet1!A1:D';
+
+        $items = Item::where('status', 'Allowed')->get();
+        $data = $items->map(function ($item) {
+            return [$item->id, $item->name, $item->status, $item->created_at];
+        })->toArray();
+
+
+        $this->googleSheetsService->updateSheetData($spreadsheetId, $range, $data);
+
+        return redirect()->route('items.index')->with('success', 'Data synced with Google Sheets.');
+    }
 }
